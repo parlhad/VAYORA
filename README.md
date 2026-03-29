@@ -1,4 +1,4 @@
-{\rtf1}# 🌍 VAYORA: Domain-Specialized Environmental Health AI
+# 🌍 VAYORA: Domain-Specialized Environmental Health AI
 **Problem Statement #5: Domain-Specialized AI Agents with Compliance Guardrails**
 **Finalist Submission - ET AI Hackathon 2026**
 
