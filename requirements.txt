@@ -1,0 +1,33 @@
+# -----------------------------
+# VAYORA - Stable Requirements
+# Python 3.11 recommended
+# -----------------------------
+
+# API
+fastapi==0.115.6
+uvicorn[standard]==0.30.6
+pydantic==2.10.6
+
+# HTTP
+requests==2.32.3
+
+# Env
+python-dotenv==1.0.1
+
+# Gemini SDK
+google-genai==0.6.0
+
+# RAG / LangChain
+langchain==0.3.18
+langchain-community==0.3.17
+langchain-text-splitters==0.3.6
+langchain-huggingface==0.1.2
+
+# Vector DB
+faiss-cpu==1.9.0.post1
+
+# Embeddings
+sentence-transformers==3.4.1
+
+# Core numeric
+numpy==1.26.4

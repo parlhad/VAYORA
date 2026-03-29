@@ -1,0 +1,127 @@
+VAYORA ENVIRONMENTAL & HEALTH KNOWLEDGE BASE
+============================================
+
+== AQI BASICS ==
+AQI stands for Air Quality Index. It measures how polluted the air is and the health risk level.
+
+AQI 0-50: Good — Air quality is satisfactory. No health risk.
+AQI 51-100: Moderate — Acceptable quality. Sensitive individuals may experience minor issues.
+AQI 101-150: Unhealthy for Sensitive Groups — Children, elderly, and people with lung/heart disease may be affected.
+AQI 151-200: Unhealthy — Everyone may experience health effects.
+AQI 201-300: Very Unhealthy — Health alert. Serious effects possible.
+AQI 301+: Hazardous — Emergency conditions. Entire population affected.
+
+== KEY POLLUTANTS ==
+PM2.5: Most dangerous. Enters lungs and bloodstream. Causes heart and lung disease.
+PM10: Dust particles. Causes breathing issues.
+NO2: Vehicle emissions. Causes airway inflammation.
+SO2: Burning fuels. Causes irritation and asthma.
+O3: Ground ozone. Causes chest tightness and coughing.
+CO: Reduces oxygen in blood.
+
+== HEALTH EFFECTS OF AIR POLLUTION ==
+Short-term effects:
+- Eye irritation, coughing, sneezing
+- Shortness of breath
+- Asthma attacks
+- Headaches
+
+Long-term effects:
+- Chronic lung disease
+- Heart disease
+- Lung cancer
+- Reduced life expectancy
+- Brain effects (memory decline, dementia risk)
+
+Air pollution causes ~7 million deaths globally each year.
+
+== VULNERABLE GROUPS ==
+Children: Developing lungs, higher breathing rate → higher risk.
+Elderly: Weak immunity → high risk.
+Pregnant women: Risk of low birth weight and complications.
+Asthma/COPD: High sensitivity even at AQI 100.
+Heart patients: Increased risk of heart attack due to PM2.5.
+
+== HOME REMEDIES ==
+Tulsi leaves: Improve respiratory health.
+Ginger + honey tea: Anti-inflammatory, soothes throat.
+Steam inhalation (eucalyptus): Clears airways.
+Turmeric milk: Anti-inflammatory.
+Amla: Rich in Vitamin C.
+Jaggery (gur): Helps clear lungs.
+Honey: Reduces throat irritation.
+
+== INDOOR PROTECTION ==
+Keep windows closed during high AQI.
+Use HEPA air purifier (removes 99.97% particles).
+Wet mopping instead of dry sweeping.
+Avoid incense, candles, smoking indoors.
+Use air-purifying plants (Spider plant, Aloe vera, Snake plant).
+
+== OUTDOOR PRECAUTIONS ==
+Wear N95/KN95 mask above AQI 150.
+Avoid outdoor exercise above AQI 100.
+Avoid peak traffic hours.
+Wash face, eyes, and nose after coming indoors.
+Change clothes after exposure.
+
+== BREATHING EXERCISES ==
+Pranayama: Improves lung capacity.
+Anulom Vilom: Improves oxygen flow.
+Diaphragmatic breathing: Deep lung breathing.
+
+== CAUSES OF POLLUTION (INDIA FOCUS) ==
+Vehicle emissions (major source in cities).
+Industrial pollution (factories, power plants).
+Construction dust (PM10).
+Crop burning (Punjab, Haryana → Delhi impact).
+Diwali fireworks (extreme AQI spikes).
+Road dust (30% of PM10 in cities).
+Biomass cooking (rural areas).
+
+== WEATHER IMPACT ==
+Low wind → pollution buildup.
+Temperature inversion → traps pollutants.
+Rain → reduces AQI.
+Humidity → increases haze.
+Sunlight → increases ozone.
+
+== PERSONAL PROTECTION ==
+N95 masks filter 95% PM2.5.
+Stay hydrated (8–10 glasses water).
+Eat antioxidant foods (Vitamin C, E, Omega-3).
+Use nasal rinse to clear pollutants.
+Steam inhalation helps lungs.
+
+== SPECIAL HEALTH GUIDANCE ==
+Asthma:
+- Use inhaler before going out
+- Avoid outdoor exposure above AQI 150
+
+Heart patients:
+- Avoid exertion above AQI 100
+
+Children:
+- Avoid outdoor sports above AQI 150
+
+Pregnant women:
+- Limit exposure above AQI 100
+
+== FAST RELIEF ==
+Eye irritation → wash with cold water
+Sore throat → ginger tea
+Runny nose → steam inhalation
+Dry cough → honey + warm water
+Breathing issue → move indoors immediately
+
+== FUTURE & SOLUTIONS ==
+Electric vehicles reduce pollution.
+Green infrastructure reduces PM2.5 by 10–25%.
+Government programs (NCAP) aim to reduce pollution.
+Public awareness and behavior change are critical.
+
+== IMPORTANT NOTE ==
+Always prioritize:
+- Reducing exposure
+- Protecting lungs
+- Monitoring AQI regularly
