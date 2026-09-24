@@ -40,7 +40,12 @@ if not DATABASE_URL:
         "Add DATABASE_URL to the VAYORA .env file."
     )
 
-
+if DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = DATABASE_URL.replace(
+        "postgresql://",
+        "postgresql+psycopg://",
+        1
+    )
 # ============================================================
 # ENGINE
 # ============================================================
