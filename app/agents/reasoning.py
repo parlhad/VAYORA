@@ -1,70 +1,175 @@
-def assess_risk(aqi: int) -> dict:
-    if aqi is None:
-        return {
-            "category": "Unknown",
-            "risk": "Unknown",
-            "urgency": "low",
-            "color": "gray",
-            "outdoor_ok": True,
-            "mask_needed": False
-        }
+from typing import Any, Dict, Optional
 
-    elif aqi <= 50:
-        return {
-            "category": "Good",
-            "risk": "Low",
-            "urgency": "low",
-            "color": "green",
-            "outdoor_ok": True,
-            "mask_needed": False
-        }
+from app.services.health_logic import interpret_aqi
 
-    elif aqi <= 100:
-        return {
-            "category": "Moderate",
-            "risk": "Low",
-            "urgency": "low",
-            "color": "yellow",
-            "outdoor_ok": True,
-            "mask_needed": False
-        }
 
-    elif aqi <= 150:
-        return {
-            "category": "Unhealthy for Sensitive Groups",
-            "risk": "Medium",
-            "urgency": "medium",
-            "color": "orange",
-            "outdoor_ok": True,
-            "mask_needed": False
-        }
+def assess_risk(aqi: Optional[int]) -> Dict[str, Any]:
+    """
+    Assess the health risk associated with the current AQI.
 
-    elif aqi <= 200:
+    This is a deterministic reasoning layer.
+
+    Responsibilities:
+    - Validate the AQI value.
+    - Use health_logic.py as the authoritative AQI
+      interpretation layer.
+    - Convert that interpretation into a compact risk
+      decision for the VAYORA agent.
+
+    This function does NOT:
+    - call Gemini
+    - invent environmental data
+    - estimate missing AQI
+    - replace the authoritative AQI classification
+    """
+
+    # =========================================================
+    # 1. Validate AQI
+    # =========================================================
+
+    try:
+        if aqi is None:
+            normalized_aqi = None
+        else:
+            normalized_aqi = int(aqi)
+
+    except (TypeError, ValueError):
+        normalized_aqi = None
+
+    # =========================================================
+    # 2. Use existing authoritative AQI interpretation
+    # =========================================================
+
+    assessment = interpret_aqi(normalized_aqi)
+
+    # Protect against an unexpected response from health_logic.
+    if not isinstance(assessment, dict):
+        assessment = {}
+
+    # =========================================================
+    # 3. AQI unavailable
+    # =========================================================
+
+    if normalized_aqi is None:
+
         return {
-            "category": "Unhealthy",
-            "risk": "High",
-            "urgency": "high",
-            "color": "red",
+            "aqi": None,
+
+            "category": assessment.get(
+                "category",
+                "Unknown"
+            ),
+
+            "risk": assessment.get(
+                "risk_level",
+                "Unknown"
+            ),
+
+            "urgency": assessment.get(
+                "urgency",
+                "low"
+            ),
+
+            "color": assessment.get(
+                "color",
+                "gray"
+            ),
+
             "outdoor_ok": False,
-            "mask_needed": True
+
+            "mask_needed": False,
+
+            "outdoor_activity": assessment.get(
+                "outdoor_activity",
+                "unknown"
+            ),
+
+            "sensitive_groups": assessment.get(
+                "sensitive_groups",
+                []
+            ),
+
+            "reason": (
+                "Current AQI data is unavailable."
+            ),
+
+            "data_available": False,
         }
 
-    elif aqi <= 300:
-        return {
-            "category": "Very Unhealthy",
-            "risk": "Very High",
-            "urgency": "critical",
-            "color": "purple",
-            "outdoor_ok": False,
-            "mask_needed": True
-        }
+    # =========================================================
+    # 4. Valid AQI
+    # =========================================================
 
-    else:
-        return {
-            "category": "Hazardous",
-            "risk": "Severe",
-            "urgency": "critical",
-            "color": "maroon",
-            "outdoor_ok": False,
-            "mask_needed": True
-        }
+    outdoor_activity = assessment.get(
+        "outdoor_activity",
+        "unknown"
+    )
+
+    return {
+
+        # -----------------------------------------------------
+        # AQI
+        # -----------------------------------------------------
+
+        "aqi": normalized_aqi,
+
+        # -----------------------------------------------------
+        # Authoritative health interpretation
+        # -----------------------------------------------------
+
+        "category": assessment.get(
+            "category",
+            "Unknown"
+        ),
+
+        "risk": assessment.get(
+            "risk_level",
+            "Unknown"
+        ),
+
+        "urgency": assessment.get(
+            "urgency",
+            "low"
+        ),
+
+        "color": assessment.get(
+            "color",
+            "gray"
+        ),
+
+        # -----------------------------------------------------
+        # Outdoor guidance
+        # -----------------------------------------------------
+
+        "outdoor_ok": outdoor_activity in {
+            "unrestricted",
+            "unrestricted for most",
+        },
+
+        "mask_needed": assessment.get(
+            "mask_needed",
+            False
+        ),
+
+        "outdoor_activity": outdoor_activity,
+
+        # -----------------------------------------------------
+        # Sensitive groups
+        # -----------------------------------------------------
+
+        "sensitive_groups": assessment.get(
+            "sensitive_groups",
+            []
+        ),
+
+        # -----------------------------------------------------
+        # Deterministic explanation
+        # -----------------------------------------------------
+
+        "reason": assessment.get(
+            "explanation",
+            ""
+        ),
+
+        "data_available": True,
+    }

@@ -1,0 +1,35 @@
+services:
+
+  postgres:
+    image: postgres:16
+
+    container_name: vayora-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: vayora
+      POSTGRES_USER: vayora
+      POSTGRES_PASSWORD: vayora_dev_password
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - vayora_postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U vayora -d vayora"
+        ]
+
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+
+volumes:
+
+  vayora_postgres_data:

@@ -18,18 +18,63 @@
     </div>
   </div>
   <div class="nav-controls">
-    <select id="langSelect" class="ctrl-select" title="Language">
-      <option value="en">EN</option>
-      <option value="hi">हिंदी</option>
-      <option value="hinglish">Hinglish</option>
-    </select>
-    <select id="modeSelect" class="ctrl-select" title="Response Mode">
-      <option value="balanced">Balanced</option>
-      <option value="deep">Deep</option>
-      <option value="emergency">Emergency</option>
-    </select>
-    <button class="nav-btn" id="drawerBtn" title="Menu">☰</button>
+
+  <select id="langSelect" class="ctrl-select" title="Language">
+    <option value="en">EN</option>
+    <option value="hi">हिंदी</option>
+    <option value="hinglish">Hinglish</option>
+  </select>
+
+  <select id="modeSelect" class="ctrl-select" title="Response Mode">
+    <option value="balanced">Balanced</option>
+    <option value="deep">Deep</option>
+    <option value="emergency">Emergency</option>
+  </select>
+
+  <button
+    class="nav-btn location-btn"
+    id="locationBtn"
+    type="button"
+    title="Select location"
+  >
+    📍 <span id="locationLabel">Location</span>
+  </button>
+
+  <div class="location-search" id="locationSearch">
+    <input
+      type="text"
+      id="locationInput"
+      placeholder="Search city or location..."
+      autocomplete="off"
+    />
+    <button
+      class="nav-btn"
+      id="locationSearchBtn"
+      type="button"
+      title="Search location"
+    >
+      🔎
+    </button>
   </div>
+
+  <button
+    class="nav-btn"
+    id="mapBtn"
+    title="Open map"
+    disabled
+  >
+    🗺️ Map
+  </button>
+
+  <button
+    class="nav-btn"
+    id="drawerBtn"
+    title="Menu"
+  >
+    ☰
+  </button>
+
+</div>
 </header>
 
 <!-- ── SIDE DRAWER ──────────────────────────────────────────────────────────── -->
@@ -63,6 +108,49 @@
     <button class="drawer-btn" onclick="sendChip('Health effects of long-term pollution exposure')">Long-term health effects</button>
     <button class="drawer-btn" onclick="sendChip('What is climate change and how does it affect air quality?')">Climate & air quality</button>
   </div>
+<!-- ── AUTHENTICATION ───────────────────────────────────────────────────── -->
+<div class="drawer-section">
+  <div class="section-title">Account</div>
+
+  <div id="authStatus" class="auth-status">
+    Not logged in
+  </div>
+
+  <button
+    class="drawer-btn"
+    id="loginBtn"
+    onclick="openAuthModal()"
+  >
+    🔐 Login / Register
+  </button>
+
+  <button
+    class="drawer-btn"
+    id="logoutBtn"
+    onclick="logoutUser()"
+    style="display:none;"
+  >
+    🚪 Logout
+  </button>
+</div>
+
+<!-- ── CONVERSATION HISTORY ──────────────────────────────────────────────── -->
+<div class="drawer-section">
+  <div class="section-title">Conversations</div>
+
+  <button
+    class="drawer-btn"
+    onclick="clearChat()"
+>
+    <span>＋</span> New Chat
+</button>
+
+  <div id="conversationList" class="conversation-list">
+    <div class="conversation-empty">
+      No conversations yet
+    </div>
+  </div>
+</div>
 
   <div class="drawer-section">
     <div class="section-title">Session</div>
@@ -70,6 +158,7 @@
   </div>
   <div class="drawer-footer">VAYORA v3.0 · Environmental AI</div>
 </aside>
+
 
 <!-- ── MAIN ─────────────────────────────────────────────────────────────────── -->
 <main class="main" id="main">
@@ -83,7 +172,22 @@
     <span class="aqi-pill" id="aqiPill">AQI —</span>
     <span id="aqiCat" style="font-size:12px;opacity:0.8">—</span>
   </div>
+  <!-- ── VAYORA SPEAKING INDICATOR ───────────────────────────────────── -->
+<div
+  class="voice-speaking"
+  id="voiceSpeaking"
+  aria-hidden="true"
+>
+  <div class="voice-orb">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 
+  <div class="voice-speaking-text">
+    VAYORA is speaking
+  </div>
+</div>
   <!-- Composer -->
   <div class="composer">
     <button class="icon-btn mic-btn" id="micBtn" title="Voice input" onclick="toggleVoice()">🎤</button>
@@ -97,8 +201,206 @@
     ></textarea>
     <button class="send" id="sendBtn" onclick="sendMessage()">Send</button>
   </div>
-  <div class="hint">VAYORA · Live AQI · Health · Environment · Voice enabled</div>
+    <div class="hint">VAYORA · Live AQI · Health · Environment · Voice enabled</div>
 </main>
+
+<!-- ── MAP VISUALIZATION PANEL ─────────────────────────────────────────── -->
+<div class="map-overlay" id="mapOverlay" onclick="closeMapPanel()"></div>
+
+<section class="map-panel" id="mapPanel" aria-hidden="true">
+  <div class="map-panel-header">
+    <div>
+      <div class="map-panel-title" id="mapPanelTitle">VAYORA Map</div>
+      <div class="map-panel-subtitle" id="mapPanelSubtitle">
+        Environmental visualization
+      </div>
+    </div>
+
+    <button
+      class="icon-btn"
+      type="button"
+      title="Close map"
+      onclick="closeMapPanel()"
+    >
+      ✕
+    </button>
+  </div>
+
+    <div class="map-panel-tools" id="mapPanelTools">
+    <button type="button" class="map-layer-btn active" id="baseMapBtn">
+      🗺️ Map
+    </button>
+
+    <button type="button" class="map-layer-btn" id="aqiMapBtn">
+      🌫️ AQI
+    </button>
+
+    <button type="button" class="map-layer-btn" id="weatherMapBtn">
+      🌦️ Weather
+    </button>
+
+    <button type="button" class="map-layer-btn" id="rainMapBtn">
+      🌧️ Rain
+    </button>
+
+    <button type="button" class="map-layer-btn" id="satelliteMapBtn">
+      🛰️ Satellite
+    </button>
+  </div>
+  <div
+  id="vayoraRainStatus"
+  style="
+    display:none;
+    margin:6px 10px;
+    padding:7px 10px;
+    border-radius:6px;
+    font-size:11px;
+    color:#00e5ff;
+    background:#06131b;
+    border:1px solid rgba(0,229,255,0.25);
+  "
+></div>
+
+  <div class="map-container" id="vayoraMap"></div>
+</section>
+
+<!-- ── AUTH MODAL ───────────────────────────────────────────────────────── -->
+<div class="auth-overlay" id="authOverlay">
+
+  <div class="auth-modal">
+
+    <div class="auth-header">
+      <div>
+        <div class="auth-title">VAYORA Account</div>
+        <div class="auth-subtitle">
+          Sign in to access your conversations
+        </div>
+      </div>
+
+      <button
+        class="icon-btn"
+        type="button"
+        onclick="closeAuthModal()"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="auth-tabs">
+      <button
+        id="loginTab"
+        class="auth-tab active"
+        type="button"
+        onclick="showLoginForm()"
+      >
+        Login
+      </button>
+
+      <button
+        id="registerTab"
+        class="auth-tab"
+        type="button"
+        onclick="showRegisterForm()"
+      >
+        Register
+      </button>
+    </div>
+
+    <!-- LOGIN -->
+    <form
+      id="loginForm"
+      class="auth-form"
+      onsubmit="loginUser(event)"
+    >
+
+      <input
+        id="loginEmail"
+        class="auth-input"
+        type="email"
+        placeholder="Email"
+        required
+      />
+
+      <input
+        id="loginPassword"
+        class="auth-input"
+        type="password"
+        placeholder="Password"
+        required
+      />
+
+      <button
+        class="auth-submit"
+        type="submit"
+      >
+        Login
+      </button>
+
+    </form>
+
+    <!-- REGISTER -->
+    <form
+      id="registerForm"
+      class="auth-form"
+      style="display:none;"
+      onsubmit="registerUser(event)"
+    >
+
+      <input
+        id="registerName"
+        class="auth-input"
+        type="text"
+        placeholder="Name"
+        required
+      />
+
+      <input
+        id="registerEmail"
+        class="auth-input"
+        type="email"
+        placeholder="Email"
+        required
+      />
+
+      <input
+        id="registerPassword"
+        class="auth-input"
+        type="password"
+        placeholder="Password"
+        required
+      />
+
+      <button
+        class="auth-submit"
+        type="submit"
+      >
+        Create Account
+      </button>
+
+    </form>
+
+    <div
+      id="authMessage"
+      class="auth-message"
+    ></div>
+
+  </div>
+
+</div>
+
+<!-- Leaflet map library — stable 1.9.4 -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""
+/>
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
 
 <script src="/static/app.js"></script>
 </body>

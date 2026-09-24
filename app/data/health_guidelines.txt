@@ -1,127 +1,768 @@
 VAYORA ENVIRONMENTAL & HEALTH KNOWLEDGE BASE
-============================================
+=============================================
+
+PURPOSE
+-------
+This knowledge base provides general environmental, air-quality,
+weather-impact, and health-protection knowledge for VAYORA.
+
+IMPORTANT:
+- Live AQI values must come from the live AQI service.
+- Live weather values must come from the live weather service.
+- This knowledge base must NOT be used to invent current environmental values.
+- AQI categories shown by VAYORA should follow the application's
+  deterministic AQI interpretation.
+- Health information is general guidance and is not a medical diagnosis.
+- When symptoms are severe or rapidly worsening, recommend appropriate
+  professional medical care.
+
 
 == AQI BASICS ==
-AQI stands for Air Quality Index. It measures how polluted the air is and the health risk level.
+----------------
 
-AQI 0-50: Good — Air quality is satisfactory. No health risk.
-AQI 51-100: Moderate — Acceptable quality. Sensitive individuals may experience minor issues.
-AQI 101-150: Unhealthy for Sensitive Groups — Children, elderly, and people with lung/heart disease may be affected.
-AQI 151-200: Unhealthy — Everyone may experience health effects.
-AQI 201-300: Very Unhealthy — Health alert. Serious effects possible.
-AQI 301+: Hazardous — Emergency conditions. Entire population affected.
+AQI stands for Air Quality Index. It is a numerical indicator used to
+communicate how polluted the air is and the potential health concern
+associated with the measured air quality.
+
+VAYORA's live AQI value must always come from its configured live AQI
+source rather than from this knowledge base.
+
+General AQI interpretation used by VAYORA:
+
+AQI 0-50:
+Good — Air quality is generally satisfactory and poses little or no
+health risk under the applicable AQI scale.
+
+AQI 51-100:
+Moderate — Air quality is generally acceptable, although unusually
+sensitive individuals may experience effects.
+
+AQI 101-150:
+Unhealthy for Sensitive Groups — Sensitive groups may experience
+health effects, while the general population is less likely to be
+affected.
+
+AQI 151-200:
+Unhealthy — Some members of the general population may experience
+health effects, with greater concern for sensitive groups.
+
+AQI 201-300:
+Very Unhealthy — Health alert conditions; the risk of health effects
+is increased for everyone.
+
+AQI 301+:
+Hazardous — Emergency-level air-quality conditions with potentially
+serious health effects.
+
+IMPORTANT:
+AQI scales can differ between countries and systems. VAYORA should
+use the category produced by its deterministic health-interpretation
+logic for live responses.
+
 
 == KEY POLLUTANTS ==
-PM2.5: Most dangerous. Enters lungs and bloodstream. Causes heart and lung disease.
-PM10: Dust particles. Causes breathing issues.
-NO2: Vehicle emissions. Causes airway inflammation.
-SO2: Burning fuels. Causes irritation and asthma.
-O3: Ground ozone. Causes chest tightness and coughing.
-CO: Reduces oxygen in blood.
+--------------------
+
+PM2.5:
+Fine particulate matter with an aerodynamic diameter of about
+2.5 micrometres or smaller. These particles can penetrate deeply
+into the respiratory system and are strongly associated with
+cardiovascular and respiratory health effects.
+
+PM10:
+Particulate matter with an aerodynamic diameter of about 10 micrometres
+or smaller. It includes larger particles such as dust and can affect
+the respiratory system.
+
+NO2:
+Nitrogen dioxide. It is commonly associated with combustion processes,
+especially traffic and fuel burning. Exposure can irritate the
+respiratory system and is associated with respiratory health effects.
+
+SO2:
+Sulfur dioxide. It is commonly produced by burning sulfur-containing
+fuels and can irritate the respiratory system. People with asthma
+may be particularly sensitive.
+
+O3:
+Ground-level ozone. It is a secondary pollutant formed through
+chemical reactions involving precursor pollutants in sunlight.
+It can irritate the airways and contribute to coughing and breathing
+difficulty.
+
+CO:
+Carbon monoxide. A poisonous gas produced by incomplete combustion.
+It reduces the blood's ability to carry oxygen and can be dangerous
+at sufficiently high exposure levels.
+
+IMPORTANT:
+Pollutant measurements returned by WAQI must be interpreted according
+to the units and meaning provided by the source. Do not assume that
+every WAQI IAQI value is a concentration in µg/m³.
+
 
 == HEALTH EFFECTS OF AIR POLLUTION ==
-Short-term effects:
-- Eye irritation, coughing, sneezing
+-------------------------------------
+
+Short-term exposure can be associated with:
+- Eye, nose, and throat irritation
+- Coughing
+- Wheezing
 - Shortness of breath
-- Asthma attacks
-- Headaches
+- Breathing discomfort
+- Worsening of asthma symptoms
+- Other respiratory irritation
 
-Long-term effects:
-- Chronic lung disease
-- Heart disease
+Long-term or repeated exposure to air pollution is associated with
+increased risk of:
+- Cardiovascular disease
+- Stroke
+- Chronic respiratory disease
 - Lung cancer
-- Reduced life expectancy
-- Brain effects (memory decline, dementia risk)
+- Respiratory infections
+- Other adverse health outcomes
 
-Air pollution causes ~7 million deaths globally each year.
+Fine particulate pollution is especially important because very small
+particles can penetrate deeply into the respiratory system and are
+associated with cardiovascular and respiratory disease.
 
-== VULNERABLE GROUPS ==
-Children: Developing lungs, higher breathing rate → higher risk.
-Elderly: Weak immunity → high risk.
-Pregnant women: Risk of low birth weight and complications.
-Asthma/COPD: High sensitivity even at AQI 100.
-Heart patients: Increased risk of heart attack due to PM2.5.
+WHO estimates that the combined effects of ambient and household air
+pollution are associated with approximately 7 million premature deaths
+globally each year.
 
-== HOME REMEDIES ==
-Tulsi leaves: Improve respiratory health.
-Ginger + honey tea: Anti-inflammatory, soothes throat.
-Steam inhalation (eucalyptus): Clears airways.
-Turmeric milk: Anti-inflammatory.
-Amla: Rich in Vitamin C.
-Jaggery (gur): Helps clear lungs.
-Honey: Reduces throat irritation.
+VAYORA should present this as population-level evidence, not as a
+prediction of an individual's health outcome.
 
-== INDOOR PROTECTION ==
-Keep windows closed during high AQI.
-Use HEPA air purifier (removes 99.97% particles).
-Wet mopping instead of dry sweeping.
-Avoid incense, candles, smoking indoors.
-Use air-purifying plants (Spider plant, Aloe vera, Snake plant).
 
-== OUTDOOR PRECAUTIONS ==
-Wear N95/KN95 mask above AQI 150.
-Avoid outdoor exercise above AQI 100.
-Avoid peak traffic hours.
-Wash face, eyes, and nose after coming indoors.
-Change clothes after exposure.
-
-== BREATHING EXERCISES ==
-Pranayama: Improves lung capacity.
-Anulom Vilom: Improves oxygen flow.
-Diaphragmatic breathing: Deep lung breathing.
-
-== CAUSES OF POLLUTION (INDIA FOCUS) ==
-Vehicle emissions (major source in cities).
-Industrial pollution (factories, power plants).
-Construction dust (PM10).
-Crop burning (Punjab, Haryana → Delhi impact).
-Diwali fireworks (extreme AQI spikes).
-Road dust (30% of PM10 in cities).
-Biomass cooking (rural areas).
-
-== WEATHER IMPACT ==
-Low wind → pollution buildup.
-Temperature inversion → traps pollutants.
-Rain → reduces AQI.
-Humidity → increases haze.
-Sunlight → increases ozone.
-
-== PERSONAL PROTECTION ==
-N95 masks filter 95% PM2.5.
-Stay hydrated (8–10 glasses water).
-Eat antioxidant foods (Vitamin C, E, Omega-3).
-Use nasal rinse to clear pollutants.
-Steam inhalation helps lungs.
-
-== SPECIAL HEALTH GUIDANCE ==
-Asthma:
-- Use inhaler before going out
-- Avoid outdoor exposure above AQI 150
-
-Heart patients:
-- Avoid exertion above AQI 100
+== VULNERABLE / SENSITIVE GROUPS ==
+-----------------------------------
 
 Children:
-- Avoid outdoor sports above AQI 150
+Developing lungs and higher ventilation relative to body size can
+increase concern during significant pollution exposure.
 
-Pregnant women:
-- Limit exposure above AQI 100
+Older adults:
+Older adults may be more vulnerable to the effects of air pollution,
+particularly when underlying health conditions are present.
 
-== FAST RELIEF ==
-Eye irritation → wash with cold water
-Sore throat → ginger tea
-Runny nose → steam inhalation
-Dry cough → honey + warm water
-Breathing issue → move indoors immediately
+Pregnant people:
+Air pollution exposure is associated with adverse pregnancy and
+birth outcomes. Avoiding unnecessary exposure is appropriate when
+air quality is poor.
 
-== FUTURE & SOLUTIONS ==
-Electric vehicles reduce pollution.
-Green infrastructure reduces PM2.5 by 10–25%.
-Government programs (NCAP) aim to reduce pollution.
-Public awareness and behavior change are critical.
+People with asthma or other respiratory disease:
+Poor air quality can worsen respiratory symptoms and may increase
+the risk of exacerbations.
 
-== IMPORTANT NOTE ==
-Always prioritize:
-- Reducing exposure
-- Protecting lungs
-- Monitoring AQI regularly
+People with cardiovascular disease:
+Air pollution, particularly particulate pollution, is associated
+with cardiovascular health risks.
+
+IMPORTANT:
+VAYORA must not diagnose a condition or tell a person to change
+prescribed medication.
+
+
+== PERSONAL EXPOSURE REDUCTION ==
+--------------------------------
+
+When air quality is poor:
+
+- Reduce unnecessary outdoor exposure.
+- Consider postponing strenuous outdoor exercise.
+- Keep indoor spaces appropriately protected from outdoor pollution.
+- Follow local public-health guidance when available.
+- If outdoor exposure cannot be avoided, use a properly fitted
+  particulate respirator such as an appropriate N95 when suitable.
+- Avoid adding indoor pollution through smoking, burning materials,
+  incense, or other combustion sources.
+- Monitor live AQI conditions when planning outdoor activities.
+
+The appropriate action depends on the actual AQI, pollutant mix,
+weather, activity level, and individual sensitivity.
+
+VAYORA should not claim that one fixed AQI threshold automatically
+applies to every person or activity.
+
+
+== MASKS ==
+----------
+
+A properly fitted particulate respirator such as an N95 can reduce
+inhalation of airborne particles when used correctly.
+
+Important limitations:
+- Particle respirators do not provide protection from every pollutant.
+- They do not remove carbon monoxide.
+- Fit and correct use are important.
+- Facial hair or poor fit can reduce effectiveness.
+- Users should follow applicable public-health and occupational
+  guidance.
+
+VAYORA should recommend a suitable particulate respirator when
+appropriate rather than presenting a mask as complete protection
+from air pollution.
+
+
+== INDOOR AIR QUALITY ==
+------------------------
+
+Useful exposure-reduction measures include:
+
+- Keep windows and doors closed when outdoor pollution is high,
+  when appropriate for the building and ventilation situation.
+- Use an appropriately sized portable air cleaner when available.
+- A HEPA filter is designed to remove at least 99.97% of particles
+  of 0.3 micrometres under the applicable test conditions.
+- Replace or maintain filters according to manufacturer instructions.
+- Avoid smoking indoors.
+- Avoid unnecessary burning of incense, candles, or other materials
+  that generate indoor particles.
+- Use kitchen exhaust ventilation when cooking produces pollutants.
+- Wet cleaning can help reduce the resuspension of settled dust.
+- Maintain adequate ventilation when outdoor air quality permits.
+
+IMPORTANT:
+Air cleaners designed primarily for particles do not necessarily
+remove gases such as carbon monoxide.
+
+
+== INDOOR PLANTS ==
+-------------------
+
+Indoor plants may have aesthetic and psychological benefits, but
+ordinary household plants should NOT be presented by VAYORA as a
+reliable replacement for ventilation, source control, filtration,
+or an air purifier.
+
+VAYORA should prioritize:
+1. Removing or reducing pollution sources.
+2. Appropriate ventilation when outdoor conditions permit.
+3. Effective filtration when needed.
+
+
+== OUTDOOR ACTIVITY ==
+----------------------
+
+Outdoor activity decisions should consider:
+
+- Current AQI
+- Pollutant levels
+- Weather conditions
+- Duration of exposure
+- Exercise intensity
+- Individual sensitivity
+- Whether the activity can be moved indoors
+
+When air pollution is high:
+- Reduce strenuous outdoor exercise.
+- Prefer shorter exposure when outdoor activity is necessary.
+- Sensitive individuals should take additional precautions.
+- Follow the live AQI category and VAYORA's deterministic health
+  guidance rather than relying on one universal threshold.
+
+For exercise-related questions, VAYORA should explain the decision
+using current live environmental data whenever available.
+
+
+== WEATHER AND AIR POLLUTION ==
+-------------------------------
+
+Wind:
+Higher wind speeds can help disperse pollutants in some situations,
+while stagnant or low-wind conditions can allow pollutants to
+accumulate.
+
+Temperature inversion:
+An inversion can limit vertical mixing and trap pollutants close
+to the ground.
+
+Rain:
+Rain can remove some particles from the atmosphere and may temporarily
+improve particulate air quality. However, rainfall does not guarantee
+clean air and its effect depends on rainfall intensity, duration,
+wind, pollutant sources, and local conditions.
+
+Humidity:
+High humidity can increase haze and can affect particulate matter
+through interactions with water in the atmosphere. High humidity does
+not automatically mean that pollution is higher.
+
+Sunlight:
+Sunlight drives photochemical reactions that can contribute to the
+formation of ground-level ozone when precursor pollutants are present.
+
+Weather should therefore be used as context for environmental
+interpretation rather than as proof of a specific AQI value.
+
+
+== CURRENT WEATHER INFORMATION ==
+---------------------------------
+
+When the user asks about current weather, VAYORA should use the
+live OpenWeather service whenever available.
+
+Useful current weather fields may include:
+- Temperature
+- Feels-like temperature
+- Humidity
+- Wind speed
+- Wind direction
+- Cloudiness
+- Visibility
+- Atmospheric pressure
+- Rain during the available observation period
+- Snow when applicable
+- Current weather condition
+
+IMPORTANT:
+If rain data is unavailable, VAYORA must say that precipitation
+was not reported by the current weather source.
+
+VAYORA must NOT claim:
+"It is raining now"
+unless the live data actually supports that statement.
+
+Similarly, absence of reported rain does not prove that it is
+definitely not raining.
+
+
+== RAIN QUESTIONS ==
+--------------------
+
+When a user asks:
+
+"Is it raining in Pune?"
+
+VAYORA should check the live weather data.
+
+Possible evidence includes:
+- Current weather condition
+- Reported precipitation amount
+- Rainfall reported by the source
+- Weather forecast when the user asks about future rain
+
+If precipitation data is unavailable:
+- State that precipitation was not reported.
+- Do not convert missing data into "no rain."
+
+When the user asks:
+
+"Will it rain tomorrow?"
+
+VAYORA should use forecast data rather than current conditions.
+
+
+== HEAT AND TEMPERATURE QUESTIONS ==
+------------------------------------
+
+When a user asks about heat:
+
+VAYORA should distinguish between:
+- Current temperature
+- Feels-like temperature
+- Humidity
+- Wind
+- Forecast temperature
+- Heat-related risk when sufficient information is available
+
+High temperature combined with high humidity can increase heat stress
+because evaporation of sweat becomes less effective.
+
+For heat-related questions, VAYORA should avoid making a medical
+diagnosis.
+
+If a user reports severe heat-related symptoms such as confusion,
+fainting, or severe weakness, VAYORA should recommend urgent medical
+attention rather than treating the situation as ordinary discomfort.
+
+
+== WEATHER + AQI COMBINED INTERPRETATION ==
+--------------------------------------------
+
+Weather and air quality can interact.
+
+Examples:
+
+Low wind + high pollution:
+Pollutants may remain concentrated near the ground.
+
+Rain + particulate pollution:
+Rain may temporarily reduce some airborne particles.
+
+High humidity + pollution:
+Haze and visibility problems may become more noticeable.
+
+Strong sunlight + precursor pollutants:
+Ground-level ozone formation can increase under suitable conditions.
+
+Important:
+These are environmental relationships, not guarantees.
+
+VAYORA should always prioritize measured live data over general
+weather assumptions.
+
+
+== HEALTH TIPS ==
+----------------
+
+General exposure-reduction practices:
+
+- Reduce exposure during poor air-quality periods.
+- Avoid strenuous outdoor activity during high pollution.
+- Use appropriate particulate protection when necessary.
+- Keep indoor pollution sources low.
+- Use effective filtration when appropriate.
+- Follow prescribed treatment plans from healthcare professionals.
+- Monitor symptoms and seek medical advice when symptoms are
+  concerning or persistent.
+
+
+== HOME REMEDIES AND COMFORT MEASURES ==
+----------------------------------------
+
+Home remedies should be presented only as comfort measures and NOT
+as treatments that remove pollutants from the lungs or cure disease.
+
+Possible comfort measures for minor irritation may include:
+- Drinking water or warm fluids for throat comfort.
+- Honey may soothe cough in appropriate individuals, but it is not
+  a treatment for the underlying cause.
+- Saline nasal rinsing may provide relief for some people when used
+  correctly with safe water and proper hygiene.
+
+VAYORA must NOT claim that:
+- Jaggery "clears the lungs."
+- Tulsi cures pollution-related damage.
+- Steam inhalation removes pollutants from the lungs.
+- Turmeric milk reverses pollution damage.
+- Any food detoxifies the lungs.
+- A home remedy can replace medical treatment.
+
+For respiratory symptoms, the safest first step is exposure reduction.
+Persistent, severe, or worsening symptoms require appropriate medical
+evaluation.
+
+
+== BREATHING EXERCISES ==
+-------------------------
+
+Breathing exercises may help some people with relaxation or breathing
+control, but VAYORA should not claim that they remove air pollutants
+from the lungs or directly increase blood oxygen in a guaranteed way.
+
+Examples include:
+- Diaphragmatic breathing
+- Controlled breathing exercises
+- Relaxation-focused breathing
+
+People with significant breathing difficulty should not rely on
+breathing exercises instead of appropriate medical care.
+
+
+== ASTHMA / RESPIRATORY CONDITIONS ==
+-------------------------------------
+
+For people with asthma or other respiratory conditions:
+
+- Poor air quality may worsen symptoms.
+- Reduce unnecessary exposure during pollution episodes.
+- Follow the person's prescribed asthma or respiratory action plan.
+- Continue prescribed medication according to medical advice.
+- Do not start, stop, or change medication based solely on VAYORA.
+
+If severe breathing difficulty, inability to speak normally because
+of breathlessness, bluish lips, confusion, or rapidly worsening
+symptoms occur, urgent medical care may be required.
+
+
+== CARDIOVASCULAR HEALTH ==
+---------------------------
+
+Air pollution, particularly particulate pollution, is associated
+with cardiovascular health risks.
+
+People with cardiovascular disease should consider reducing
+unnecessary exposure during poor air-quality conditions and follow
+their healthcare professional's advice.
+
+VAYORA must not prescribe medication or provide individualized
+medical treatment plans.
+
+
+== CHILDREN AND OUTDOOR SPORTS ==
+---------------------------------
+
+Children may be more vulnerable to air pollution.
+
+During poor air-quality conditions:
+- Consider reducing strenuous outdoor activity.
+- Prefer cleaner indoor environments when appropriate.
+- Monitor the live AQI before outdoor sports.
+- Follow school, sports, and local public-health guidance when
+  available.
+
+Do not use one universal AQI number as an automatic rule for every
+child or every activity.
+
+
+== PREGNANCY ==
+--------------
+
+Pregnant people should minimize unnecessary exposure to significant
+air pollution when practical.
+
+VAYORA should provide general exposure-reduction guidance and should
+not provide individualized pregnancy treatment or medical diagnosis.
+
+
+== WARNING SIGNS ==
+-------------------
+
+VAYORA should distinguish ordinary irritation from potentially
+serious symptoms.
+
+Seek appropriate medical attention for concerning symptoms such as:
+- Severe or worsening shortness of breath
+- Chest pain or pressure
+- Fainting
+- Confusion
+- Severe weakness
+- Bluish lips or skin
+- Serious asthma symptoms not responding to the person's prescribed
+  rescue plan
+
+For emergencies, users should contact their local emergency medical
+service.
+
+
+== POLLUTION SOURCES ==
+----------------------
+
+Common sources include:
+
+Transportation:
+- Vehicle exhaust
+- Traffic-related combustion
+
+Industry and energy:
+- Factories
+- Power generation
+- Fuel combustion
+
+Construction:
+- Construction dust
+- Demolition activity
+
+Road and soil dust:
+- Resuspended particles from roads and exposed surfaces
+
+Agriculture:
+- Crop-residue burning
+- Agricultural activities
+
+Household sources:
+- Solid-fuel combustion
+- Smoking
+- Burning materials indoors
+
+Waste:
+- Open waste burning
+- Waste-processing emissions
+
+Fireworks:
+Can produce temporary spikes in particulate pollution and other
+pollutants.
+
+
+== POLLUTION AND CLIMATE ==
+---------------------------
+
+Air pollution and climate change are connected but are not the same
+thing.
+
+Activities such as fossil-fuel combustion can contribute both to
+greenhouse-gas emissions and air pollution.
+
+Reducing fossil-fuel combustion, improving energy efficiency, using
+cleaner energy, improving transportation, and reducing open burning
+can provide benefits for both air quality and climate.
+
+Some pollutants have short atmospheric lifetimes and can have strong
+climate effects, while greenhouse gases behave differently.
+
+VAYORA should explain this distinction when users ask about the
+relationship between pollution and climate change.
+
+
+== ENVIRONMENTAL EFFECTS ==
+---------------------------
+
+Air pollution can affect more than human health.
+
+Depending on the pollutant and exposure:
+- Ozone can damage vegetation.
+- Nitrogen and sulfur compounds can contribute to ecosystem
+  acidification and nutrient imbalance.
+- Particulate pollution can reduce visibility.
+- Black carbon and other short-lived pollutants can influence
+  climate and environmental systems.
+
+Environmental impacts vary by pollutant, concentration, location,
+weather, and duration of exposure.
+
+
+== SOLUTIONS ==
+--------------
+
+Ways to reduce pollution include:
+
+Individual and community actions:
+- Reduce unnecessary vehicle use.
+- Use public transport, walking, or cycling when conditions are safe.
+- Avoid open burning.
+- Improve energy efficiency.
+- Reduce indoor combustion pollution.
+- Support cleaner energy and transportation.
+
+Urban and government actions:
+- Better public transportation
+- Cleaner industrial processes
+- Dust-control measures
+- Waste-management improvements
+- Cleaner household energy
+- Air-quality monitoring
+- Strong emission standards
+- Urban planning and green infrastructure
+
+Electric vehicles can reduce tailpipe emissions, although their
+overall environmental impact depends on electricity generation,
+vehicle production, battery production, and other factors.
+
+Government programs such as India's National Clean Air Programme
+(NCAP) aim to improve air quality through coordinated pollution
+reduction efforts.
+
+
+== AIR QUALITY DECISION LOGIC FOR VAYORA ==
+-------------------------------------------
+
+When a user asks whether they should go outside, exercise, run,
+walk, cycle, play sports, or travel:
+
+VAYORA should prioritize:
+
+1. Current live AQI.
+2. AQI category and deterministic health interpretation.
+3. Relevant pollutant information.
+4. Current weather.
+5. Forecast information when the user asks about future conditions.
+6. User's stated activity.
+7. Exposure duration and intensity.
+8. Sensitive-group considerations when relevant.
+
+VAYORA should give a practical recommendation supported by available
+verified information.
+
+Do not invent environmental values.
+
+
+== LIVE DATA VS KNOWLEDGE ==
+----------------------------
+
+LIVE DATA:
+- Current AQI
+- Current pollutant readings
+- Monitoring station
+- AQI observation time
+- Current temperature
+- Current humidity
+- Current wind
+- Current precipitation information
+- Current visibility
+- Current weather condition
+- Forecast information
+
+These must come from VAYORA's configured live services.
+
+KNOWLEDGE:
+- What AQI means
+- What pollutants mean
+- General health effects
+- General exposure-reduction practices
+- Pollution science
+- Weather-pollution relationships
+- Environmental science
+- General health-protection information
+
+Gemini may explain verified live data using retrieved knowledge,
+but it must not invent live measurements.
+
+
+== DATA UNCERTAINTY ==
+----------------------
+
+If a live source is unavailable:
+
+- Say that the requested live information could not be retrieved.
+- Do not guess the current AQI.
+- Do not guess the current temperature.
+- Do not guess whether it is raining.
+- Do not guess future weather.
+- Clearly separate unavailable information from general knowledge.
+
+If a live value comes from cache, VAYORA should distinguish cached
+or recent information from a freshly retrieved observation when the
+application exposes that status.
+
+
+== MEDICAL SAFETY ==
+--------------------
+
+VAYORA is an environmental intelligence assistant, not a doctor.
+
+VAYORA should:
+- Provide general health information.
+- Encourage exposure reduction.
+- Explain environmental risks.
+- Encourage professional care when symptoms are concerning.
+
+VAYORA should NOT:
+- Diagnose diseases.
+- Prescribe medicines.
+- Tell users to stop prescribed medication.
+- Guarantee that a home remedy will cure a condition.
+- Claim that food or plants detoxify the lungs.
+- Invent medical measurements.
+- Present uncertain information as certain.
+
+
+== RESPONSE PRINCIPLES ==
+-------------------------
+
+When answering users:
+
+1. Answer the actual question first.
+2. Use live data when the question requires current information.
+3. Use RAG knowledge for general explanation and context.
+4. Clearly separate measured facts from AI interpretation.
+5. Avoid unnecessary alarm.
+6. Increase urgency when verified environmental risk is high.
+7. State uncertainty when information is unavailable.
+8. Never fabricate missing data.
+9. Keep health advice practical and evidence-aware.
+10. Never replace professional medical care with AI advice.
+
+
+== IMPORTANT FINAL RULE ==
+--------------------------
+
+VAYORA should always prioritize:
+
+- Verified live environmental data
+- Deterministic AQI interpretation
+- Evidence-based knowledge
+- Exposure reduction
+- Clear uncertainty
+- Safe health guidance
+- Practical answers to the user's actual question

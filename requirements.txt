@@ -1,6 +1,7 @@
 # -----------------------------
-# VAYORA - Stable Requirements
-# Python 3.11 recommended
+# VAYORA - Production Requirements
+# Python 3.11
+# CPU deployment
 # -----------------------------
 
 # API
@@ -11,7 +12,7 @@ pydantic==2.10.6
 # HTTP
 requests==2.32.3
 
-# Env
+# Environment
 python-dotenv==1.0.1
 
 # Gemini SDK
@@ -23,11 +24,20 @@ langchain-community==0.3.17
 langchain-text-splitters==0.3.6
 langchain-huggingface==0.1.2
 
-# Vector DB
+# Vector database
 faiss-cpu==1.9.0.post1
 
 # Embeddings
 sentence-transformers==3.4.1
 
+# CPU-only PyTorch
+torch==2.5.1+cpu
+
 # Core numeric
 numpy==1.26.4
+# Authentication
+PyJWT==2.10.1
+pwdlib[argon2]==0.2.1
+# Database
+SQLAlchemy==2.0.36
+psycopg[binary]==3.2.3

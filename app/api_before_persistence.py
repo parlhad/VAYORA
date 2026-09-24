@@ -33,7 +33,6 @@ Important design rules:
     • Live data and AI-generated text remain separate.
 """
 
-from pyexpat.errors import messages
 from typing import Optional, Dict, Any
 from uuid import uuid4
 
@@ -52,7 +51,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import select
 
 from app.database import SessionLocal
-from app.models import User, Conversation, Message
+from app.models import User
 
 from app.auth import (
     hash_password,
@@ -147,7 +146,6 @@ class ChatRequest(BaseModel):
     mode: str = "balanced"
     language: str = "en"
     session_id: Optional[str] = None
-    location: Optional[Dict[str, Any]] = None
 # ============================================================
 # AUTHENTICATION REQUEST MODELS
 # ============================================================
@@ -163,9 +161,6 @@ class LoginRequest(BaseModel):
 
     email: str
     password: str
-
-class RenameConversationRequest(BaseModel):
-    title: str
 
 # ============================================================
 # FASTAPI APPLICATION
@@ -223,19 +218,6 @@ def root():
     return FileResponse(
         "frontend/index.html"
     )
-
-# ============================================================
-# HEALTH CHECK
-# ============================================================
-
-@app.get("/health")
-def health_check():
-    return {
-        "status": "ok",
-        "service": "VAYORA"
-    }
-
-
 # ============================================================
 # AUTHENTICATION — REGISTER
 # ============================================================
@@ -356,330 +338,6 @@ def get_me(
         "authenticated": True,
         "user_id": str(user_id),
     }
-
-# ============================================================
-# PHASE 4A — GET MY CONVERSATIONS
-# ============================================================
-
-@app.get("/conversations")
-def get_my_conversations(
-    user_id=Depends(get_current_user_id),
-):
-    db = SessionLocal()
-
-    try:
-        conversations = (
-            db.query(Conversation)
-            .filter(
-                Conversation.user_id == user_id
-            )
-            .order_by(
-                Conversation.updated_at.desc()
-            )
-            .all()
-        )
-
-        return {
-            "conversations": [
-                {
-                    "id": str(conversation.id),
-                    "session_id": conversation.session_id,
-                    "title": conversation.title,
-                    "created_at": conversation.created_at,
-                    "updated_at": conversation.updated_at,
-                }
-                for conversation in conversations
-            ]
-        }
-
-    finally:
-        db.close()
-
-# ============================================================
-# PHASE 4B — GET ONE CONVERSATION WITH MESSAGES
-# ============================================================
-
-@app.get("/conversations/{session_id}")
-def get_conversation(
-    session_id: str,
-    user_id=Depends(get_current_user_id),
-):
-    db = SessionLocal()
-
-    try:
-        conversation = (
-            db.query(Conversation)
-            .filter(
-                Conversation.session_id == session_id,
-                Conversation.user_id == user_id,
-            )
-            .first()
-        )
-
-        if not conversation:
-            raise HTTPException(
-                status_code=404,
-                detail="Conversation not found.",
-            )
-
-        messages = (
-            db.query(Message)
-            .filter(
-                Message.conversation_id == conversation.id
-            )
-            .order_by(Message.created_at.asc())
-            .all()
-        )
-
-        return {
-            "conversation": {
-                "id": str(conversation.id),
-                "session_id": conversation.session_id,
-                "title": conversation.title,
-                "created_at": conversation.created_at,
-                "updated_at": conversation.updated_at,
-            },
-            "messages": [
-                {
-                    "id": str(message.id),
-                    "role": message.role,
-                    "content": message.content,
-                    "created_at": message.created_at,
-                }
-                for message in messages
-            ],
-        }
-
-    finally:
-        db.close()
-# ============================================================
-# PHASE 4C — RENAME CONVERSATION
-# ============================================================
-
-@app.patch("/conversations/{session_id}")
-def rename_conversation(
-    session_id: str,
-    payload: RenameConversationRequest,
-    user_id=Depends(get_current_user_id),
-):
-    title = " ".join(
-        payload.title.strip().split()
-    )
-
-    if not title:
-        raise HTTPException(
-            status_code=400,
-            detail="Conversation title cannot be empty.",
-        )
-
-    if len(title) > 100:
-        raise HTTPException(
-            status_code=400,
-            detail="Conversation title is too long.",
-        )
-
-    db = SessionLocal()
-
-    try:
-        conversation = (
-            db.query(Conversation)
-            .filter(
-                Conversation.session_id == session_id,
-                Conversation.user_id == user_id,
-            )
-            .first()
-        )
-
-        if not conversation:
-            raise HTTPException(
-                status_code=404,
-                detail="Conversation not found.",
-            )
-
-        conversation.title = title
-
-        db.commit()
-        db.refresh(conversation)
-
-        return {
-            "message": "Conversation renamed successfully.",
-            "conversation": {
-                "session_id": conversation.session_id,
-                "title": conversation.title,
-            },
-        }
-
-    finally:
-        db.close()
-
-# ============================================================
-# PHASE 4D — DELETE CONVERSATION
-# ============================================================
-
-@app.delete("/conversations/{session_id}")
-def delete_conversation(
-    session_id: str,
-    user_id=Depends(get_current_user_id),
-):
-    db = SessionLocal()
-
-    try:
-        conversation = (
-            db.query(Conversation)
-            .filter(
-                Conversation.session_id == session_id,
-                Conversation.user_id == user_id,
-            )
-            .first()
-        )
-
-        if not conversation:
-            raise HTTPException(
-                status_code=404,
-                detail="Conversation not found.",
-            )
-
-        db.delete(conversation)
-        db.commit()
-
-        return {
-            "message": "Conversation deleted successfully.",
-            "session_id": session_id,
-        }
-
-    finally:
-        db.close()
-# ============================================================
-# DATABASE — GET OR CREATE CONVERSATION
-# ============================================================
-
-def _get_or_create_conversation(
-    user_id,
-    session_id: str,
-):
-
-    db = SessionLocal()
-
-    try:
-
-        conversation = db.scalar(
-            select(Conversation).where(
-                Conversation.user_id == user_id,
-                Conversation.session_id == session_id,
-            )
-        )
-
-        if conversation:
-
-            return conversation.id
-
-        conversation = Conversation(
-            user_id=user_id,
-            session_id=session_id,
-            title="New Chat",
-        )
-
-        db.add(conversation)
-
-        db.commit()
-
-        db.refresh(conversation)
-
-        return conversation.id
-
-    finally:
-
-        db.close()
-# ============================================================
-# HELPER — SAVE CONVERSATION MESSAGES
-# ============================================================
-def _make_conversation_title(user_message: str) -> str:
-    title = " ".join(
-        user_message.strip().split()
-    )
-
-    if not title:
-        return "New Chat"
-
-    if len(title) > 45:
-        title = title[:45].rstrip() + "..."
-
-    return title[0].upper() + title[1:]
-
-def _save_conversation_messages(
-    conversation_id,
-    user_message: str,
-    reply: str,
-):
-
-    db = SessionLocal()
-
-    try:
-
-        conversation = db.get(
-            Conversation,
-            conversation_id
-        )
-
-        if conversation and conversation.title == "New Chat":
-            conversation.title = _make_conversation_title(
-                user_message
-            )
-
-        db.add(
-            Message(
-                conversation_id=conversation_id,
-                role="user",
-                content=user_message,
-            )
-        )
-
-        db.add(
-            Message(
-                conversation_id=conversation_id,
-                role="assistant",
-                content=reply,
-            )
-        )
-
-        db.commit()
-
-    finally:
-
-        db.close()
-# ============================================================
-# HELPER — LOAD CONVERSATION HISTORY
-# ============================================================
-
-def _get_conversation_history(
-    conversation_id,
-    limit: int = 20,
-):
-    db = SessionLocal()
-
-    try:
-        messages = (
-            db.query(Message)
-            .filter(
-                Message.conversation_id == conversation_id
-            )
-            .order_by(Message.created_at.desc())
-            .limit(limit)
-            .all()
-        )
-
-        messages.reverse()
-
-        return [
-            {
-                "role": message.role,
-                "content": message.content,
-            }
-            for message in messages
-        ]
-
-    finally:
-        db.close()
 # ============================================================
 # HELPER — NORMALIZE SESSION
 # ============================================================
@@ -1358,7 +1016,6 @@ def _generate_advisory(
     user_query: str,
     language: str,
     session_id: str,
-    conversation_id,
     intent: str = "CITY_AQI_NOW",
 ):
 
@@ -1377,13 +1034,6 @@ def _generate_advisory(
             )
             if isinstance(aqi_data, dict)
             else f"AQI data for {city} is unavailable."
-        )
-        reply = f"Sorry, {error_message}"
-
-        _save_conversation_messages(
-            conversation_id=conversation_id,
-            user_message=user_query,
-            reply=reply,
         )
 
         return {
@@ -1560,8 +1210,6 @@ Retrieved Knowledge:
 {retrieved_knowledge}
 """
 
-
-
     # ========================================================
     # 10. CALL GEMINI
     # ========================================================
@@ -1721,16 +1369,7 @@ Retrieved Knowledge:
             ),
         },
     )
-        # ========================================================
-    # 13.5 SAVE DATABASE MESSAGES
-    # ========================================================
 
-    _save_conversation_messages(
-        conversation_id=conversation_id,
-        user_message=user_query,
-        reply=reply,
-    )
-    
     # ========================================================
     # 14. FINAL RESPONSE
     # ========================================================
@@ -1779,10 +1418,6 @@ def get_advisory(
     session_id = str(
         uuid4()
     )
-    conversation_id = _get_or_create_conversation(
-    user_id=user_id,
-    session_id=session_id,
-    )
 
     return _generate_advisory(
         city=city,
@@ -1796,8 +1431,6 @@ def get_advisory(
         language="en",
 
         session_id=session_id,
-
-        conversation_id=conversation_id,
 
         intent="CITY_AQI_NOW",
     )
@@ -2032,19 +1665,6 @@ def chat_vayora(
     session_id = _get_session_id(
         payload.session_id
     )
-    conversation_id = _get_or_create_conversation(
-    user_id=user_id,
-    session_id=session_id,
-    )
-
-
-    # ============================================================
-    # LOAD DATABASE CONVERSATION HISTORY
-    # ============================================================
-
-    conversation_history = _get_conversation_history(
-    conversation_id=conversation_id,
-    )
 
     # --------------------------------------------------------
     # Empty message
@@ -2085,29 +1705,6 @@ def chat_vayora(
     time_query = intent_data.get(
         "time_query"
     )
-
-     # ========================================================
-    # SELECTED LOCATION FALLBACK
-    # ========================================================
-    #
-    # Priority:
-    # 1. Explicit city from the user's message
-    # 2. GPS/manual location selected in the frontend
-    # 3. Existing session city
-    #
-    # The original intent router remains unchanged.
-    # ========================================================
-
-    selected_location = payload.location
-
-    if not city and isinstance(selected_location, dict):
-        selected_city = (
-            selected_location.get("name")
-            or selected_location.get("query")
-        )
-
-        if selected_city:
-            city = str(selected_city).strip()
     # Apply contextual follow-up routing without replacing
     # the existing intent router.
     intent = _apply_contextual_followup(
@@ -2200,21 +1797,22 @@ def chat_vayora(
     # 4. SESSION MEMORY — CITY FALLBACK
     # ========================================================
     #
-    # Priority:
+    # IMPORTANT:
     #
-    # 1. City explicitly mentioned in current message
-    # 2. If this is a follow-up in an existing conversation,
-    #    use the city remembered for this session
-    # 3. Never use remembered city for the first message
-    #    when the current message contains no city.
+    # We no longer use:
     #
-    # This prevents an old/remembered city from being applied
-    # to a completely new conversation.
+    #     app.state.last_city
+    #
+    # because that would be shared by every user.
+    #
+    # Instead:
+    #
+    #     session_id → session_memory → last_city
+    #
     # ========================================================
 
     if (
         not city
-        and conversation_history
         and intent in {
             "CITY_AQI_NOW",
             "CITY_AQI_FORECAST",
@@ -2223,53 +1821,11 @@ def chat_vayora(
             "OUTDOOR_DECISION",
         }
     ):
-        city = get_session_city(session_id)
 
-
-    # ========================================================
-    # 4A. CONTEXTUAL FOLLOW-UP CITY FALLBACK
-    # ========================================================
-    #
-    # For follow-up phrases such as:
-    #
-    #   "is it safe?"
-    #   "what about tomorrow?"
-    #   "go outside?"
-    #   "how about tonight?"
-    #
-    # use the remembered session city ONLY when there is
-    # already conversation history.
-    # ========================================================
-
-    if (
-        not city
-        and conversation_history
-        and any(
-            phrase in user_message.lower()
-            for phrase in (
-                "is it safe",
-                "safe to go",
-                "safe outside",
-                "go outside",
-                "outside",
-                "outdoors",
-                "there",
-                "that city",
-                "this city",
-                "what about",
-                "how about",
-                "tomorrow",
-                "today",
-                "tonight",
-                "later",
-                "next",
-                "morning",
-                "afternoon",
-                "evening",
-            )
+        city = get_session_city(
+            session_id
         )
-    ):
-        city = get_session_city(session_id)
+
     # ========================================================
     # 5. GENERAL CHAT
     # ========================================================
@@ -2277,7 +1833,6 @@ def chat_vayora(
     if (
         intent == "GENERAL_CHAT"
         and not city
-        and not conversation_history
     ):
 
         reply = (
@@ -2302,15 +1857,6 @@ def chat_vayora(
 
             aqi_data=None,
         )
-         # ========================================================
-        # SAVE DATABASE MESSAGES
-        # ========================================================
-
-        _save_conversation_messages(
-            conversation_id=conversation_id,
-            user_message=user_message,
-            reply=reply,
-        )
 
         return {
             "reply": reply,
@@ -2321,71 +1867,7 @@ def chat_vayora(
 
             "data_status": "none",
         }
-    
-        # ========================================================
-    # SELECTED LOCATION SATISFIES CITY REQUIREMENT
-    # ========================================================
-    #
-    # If the user selected a GPS/manual location, the city
-    # requirement has already been satisfied.
-    #
-    # Preserve the existing router when it already detected
-    # a specific live-data intent.
-    # ========================================================
 
-    if intent == "CITY_REQUIRED" and city:
-        query_lower = user_message.lower()
-
-        has_aqi_request = any(
-            phrase in query_lower
-            for phrase in (
-                "aqi",
-                "air quality",
-                "pollution",
-                "pm2.5",
-                "pm25",
-                "pm10",
-                "no2",
-                "so2",
-                "ozone",
-            )
-        )
-
-        has_weather_request = any(
-            phrase in query_lower
-            for phrase in (
-                "weather",
-                "temperature",
-                "temp",
-                "humidity",
-                "humid",
-                "rain",
-                "raining",
-                "rainfall",
-                "precipitation",
-                "drizzle",
-                "showers",
-                "wind",
-                "windy",
-                "breeze",
-                "gust",
-                "cloud",
-                "clouds",
-                "cloudy",
-                "visibility",
-                "fog",
-                "hot",
-                "cold",
-                "heat",
-                "feels like",
-            )
-        )
-
-        if has_aqi_request:
-            intent = "CITY_AQI_NOW"
-
-        elif has_weather_request:
-            intent = "WEATHER_QUERY"
     # ========================================================
     # 6. CITY REQUIRED
     # ========================================================
@@ -2408,15 +1890,6 @@ def chat_vayora(
             city=None,
 
             aqi_data=None,
-        )
-                # ========================================================
-        # SAVE DATABASE MESSAGES
-        # ========================================================
-
-        _save_conversation_messages(
-            conversation_id=conversation_id,
-            user_message=user_message,
-            reply=reply,
         )
 
         return {
@@ -2447,8 +1920,6 @@ def chat_vayora(
             mode=mode,
 
             user_query=user_message,
-
-            conversation_id=conversation_id,
 
             language=language,
 
@@ -2486,15 +1957,6 @@ def chat_vayora(
                 bot_reply=reply,
                 city=city,
                 aqi_data=None,
-            )
-                        # ========================================================
-            # SAVE DATABASE MESSAGES
-            # ========================================================
-
-            _save_conversation_messages(
-                conversation_id=conversation_id,
-                user_message=user_message,
-                reply=reply,
             )
 
             return {
@@ -2611,16 +2073,6 @@ RULES:
                 else None
             ),
         )
-            # ========================================================
-        # SAVE DATABASE MESSAGES
-        # ========================================================
-
-        _save_conversation_messages(
-            conversation_id=conversation_id,
-            user_message=user_message,
-            reply=reply,
-        )
-
 
         return {
             "reply": reply,
@@ -2697,15 +2149,6 @@ RULES:
                 city=city,
 
                 aqi_data=None,
-            )
-            # ========================================================
-            # SAVE DATABASE MESSAGES
-            # ========================================================
-
-            _save_conversation_messages(
-                conversation_id=conversation_id,
-                user_message=user_message,
-                reply=reply,
             )
 
             return {
@@ -2815,15 +2258,6 @@ RULES:
 
             aqi_data=None,
         )
-         # ========================================================
-        # SAVE DATABASE MESSAGES
-        # ========================================================
-
-        _save_conversation_messages(
-            conversation_id=conversation_id,
-            user_message=user_message,
-            reply=reply,
-        )
 
         return {
             "reply": reply,
@@ -2868,15 +2302,6 @@ RULES:
         query=user_message,
     )
 
-        # ============================================================
-    # ADD DATABASE HISTORY TO CONTEXT
-    # ============================================================
-
-    database_history = "\n".join(
-        f"{message['role']}: {message['content']}"
-        for message in conversation_history
-    )
-
     # --------------------------------------------------------
     # Deterministic state for decision layer
     # --------------------------------------------------------
@@ -2912,19 +2337,17 @@ RULES:
     # agent can use it without requiring a breaking change to
     # run_vayora_agent().
     # --------------------------------------------------------
+
     combined_knowledge = f"""
-    VAYORA RESPONSE DECISION:
-    {response_style}
+VAYORA RESPONSE DECISION:
+{response_style}
 
-    SESSION CONTEXT:
-    {session_context}
+SESSION CONTEXT:
+{session_context}
 
-    DATABASE CONVERSATION HISTORY:
-    {database_history}
-
-    RETRIEVED KNOWLEDGE:
-    {retrieved_knowledge}
-    """
+RETRIEVED KNOWLEDGE:
+{retrieved_knowledge}
+"""
 
     reply = run_vayora_agent(
         intent=(
@@ -2967,15 +2390,7 @@ RULES:
 
         aqi_data=None,
     )
-    # ========================================================
-    # SAVE DATABASE MESSAGES
-    # ========================================================
 
-    _save_conversation_messages(
-    conversation_id=conversation_id,
-    user_message=user_message,
-    reply=reply,
-    )
     # ========================================================
     # FINAL KNOWLEDGE RESPONSE
     # ========================================================
